@@ -97,8 +97,8 @@ const InfiniteScrollComponent: React.FC = () => {
         }
     };
 
-    const openCityDetails = (cityName: string) => {
-        const url = `/city-details?name=${encodeURIComponent(cityName)}`;
+    const openCityDetails = (cityName: string, lat: number, lon: number) => {
+        const url = `/city-details?name=${encodeURIComponent(cityName)}&lat=${lat}&lon=${lon}`;
         window.open(url, '_blank');
     };
 
@@ -135,13 +135,13 @@ const InfiniteScrollComponent: React.FC = () => {
                                 <TableRow key={index}>
                                     <TableCell>
                                         <button
-                                            onClick={() => openCityDetails(item.ascii_name)}
+                                            onClick={() => openCityDetails(item.ascii_name,item.coordinates.lat,item.coordinates.lon)}
                                         >
                                             {item.ascii_name}
                                         </button>
                                     </TableCell>
                                     <TableCell>{item.cou_name_en}</TableCell>
-                                    <TableCell>{item.coordinates.lon} {item.coordinates.lat}</TableCell>
+                                    <TableCell>{item.coordinates.lat} {item.coordinates.lon}</TableCell>
                                     <TableCell>{item.timezone}</TableCell>
                                 </TableRow>
                             ))}
