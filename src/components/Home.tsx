@@ -8,8 +8,21 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { ModeToggle } from './mode-toggle';
+
 import { Input } from "@/components/ui/input"
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { ModeToggle } from './mode-toggle';
+import { Button } from './ui/button';
+import { useToast } from './ui/use-toast';
+// import { ToastAction } from '@radix-ui/react-toast';
+
 
 const InfiniteScrollComponent: React.FC = () => {
     const [data, setData] = useState<any[]>([]);
@@ -19,6 +32,12 @@ const InfiniteScrollComponent: React.FC = () => {
     const [sortOrder, setSortOrder] = useState<boolean>(true);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const observer = useRef<IntersectionObserver>();
+    const [history, setHistory] = useState<{ name: string, lat: number, lon: number }[]>(() => {
+        const storedHistory = localStorage.getItem('cityHistory');
+        return storedHistory ? JSON.parse(storedHistory) : [];
+    });
+
+    const { toast } = useToast()
 
     const fetchData = async (pageNumber: number) => {
         try {
@@ -30,6 +49,11 @@ const InfiniteScrollComponent: React.FC = () => {
             setLoading(false);
         } catch (error) {
             console.error('Error fetching data:', error);
+            toast({
+                title: " Error ",
+                description: "Error while Fetching Data",
+               
+              })
             setLoading(false);
         }
     };
@@ -100,6 +124,19 @@ const InfiniteScrollComponent: React.FC = () => {
     const openCityDetails = (cityName: string, lat: number, lon: number) => {
         const url = `/city-details?name=${encodeURIComponent(cityName)}&lat=${lat}&lon=${lon}`;
         window.open(url, '_blank');
+        // Add to history
+        addToHistory(cityName, lat, lon);
+    };
+
+    const addToHistory = (name: string, lat: number, lon: number) => {
+        const updatedHistory = [{ name, lat, lon }, ...history];
+        setHistory(updatedHistory);
+        localStorage.setItem('cityHistory', JSON.stringify(updatedHistory));
+    };
+
+    const clearHistory = () => {
+        setHistory([]);
+        localStorage.removeItem('cityHistory');
     };
 
     return (
@@ -109,6 +146,29 @@ const InfiniteScrollComponent: React.FC = () => {
                     <span className='pr-6'>theme</span>
                     <ModeToggle />
                 </div>
+                
+                <div className=' mb-4'>
+                <Dialog>
+                    <DialogTrigger><Button variant="secondary">History</Button></DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                        {history?.length ? <DialogTitle>Here's your History</DialogTitle> :<DialogTitle>No search history yet</DialogTitle>}
+                            {/* <DialogTitle>Here's your History</DialogTitle> */}
+                            <DialogDescription>
+                            <ul>
+                            {history.map((item, index) => (
+                                <li key={index}>
+                                    <button onClick={() => openCityDetails(item.name, item.lat, item.lon)}>{item.name}</button>
+                                </li>
+                            ))}
+                        </ul>
+                        <Button onClick={clearHistory}>Clear History</Button>
+                            </DialogDescription>
+                        </DialogHeader>
+                    </DialogContent>
+                </Dialog>
+                </div>
+
                 <div>
                     <div className=' w-1/3'>
                         <Input type="text"
@@ -135,7 +195,7 @@ const InfiniteScrollComponent: React.FC = () => {
                                 <TableRow key={index}>
                                     <TableCell>
                                         <button
-                                            onClick={() => openCityDetails(item.ascii_name,item.coordinates.lat,item.coordinates.lon)}
+                                            onClick={() => openCityDetails(item.ascii_name, item.coordinates.lat, item.coordinates.lon)}
                                         >
                                             {item.ascii_name}
                                         </button>
@@ -150,6 +210,7 @@ const InfiniteScrollComponent: React.FC = () => {
                 </div>
                 <div id="scroll-sentinel" style={{ height: '10px' }}></div>
                 {loading && <div>Loading...</div>}
+
             </div>
         </div>
     );
