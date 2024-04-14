@@ -21,6 +21,7 @@ import {
 import { ModeToggle } from './mode-toggle';
 import { Button } from './ui/button';
 import { useToast } from './ui/use-toast';
+import { Skeleton } from './ui/skeleton';
 // import { ToastAction } from '@radix-ui/react-toast';
 
 
@@ -48,12 +49,12 @@ const InfiniteScrollComponent: React.FC = () => {
             setOriginalData(prevData => [...prevData, ...newData]);
             setLoading(false);
         } catch (error) {
-            console.error('Error fetching data:', error);
+
             toast({
                 title: " Error ",
                 description: "Error while Fetching Data",
-               
-              })
+
+            })
             setLoading(false);
         }
     };
@@ -142,40 +143,45 @@ const InfiniteScrollComponent: React.FC = () => {
     return (
         <div className=' w-full '>
             <div className=' ml-4 mr-4'>
-                <div className='flex justify-end items-center pr-10 mt-4'>
-                    <span className='pr-6'>theme</span>
-                    <ModeToggle />
-                </div>
-                
-                <div className=' mb-4'>
-                <Dialog>
-                    <DialogTrigger><Button variant="secondary">History</Button></DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                        {history?.length ? <DialogTitle>Here's your History</DialogTitle> :<DialogTitle>No search history yet</DialogTitle>}
-                            {/* <DialogTitle>Here's your History</DialogTitle> */}
-                            <DialogDescription>
-                            <ul>
-                            {history.map((item, index) => (
-                                <li key={index}>
-                                    <button onClick={() => openCityDetails(item.name, item.lat, item.lon)}>{item.name}</button>
-                                </li>
-                            ))}
-                        </ul>
-                        <Button onClick={clearHistory}>Clear History</Button>
-                            </DialogDescription>
-                        </DialogHeader>
-                    </DialogContent>
-                </Dialog>
+                <div className='flex justify-between items-center pr-10 pl-10 mb-6 mt-4 border-b pb-4'>
+                    <div className='text-3xl'>Weather Forecast</div>
+                    <div><span className='pr-6'>theme</span>
+                        <ModeToggle /></div>
                 </div>
 
+
+
                 <div>
-                    <div className=' w-1/3'>
-                        <Input type="text"
-                            value={searchQuery}
-                            onChange={handleInputChange}
-                            placeholder="Search..." />
+                    <div className=' flex justify-between'>
+                        <div className=' w-1/3 '>
+                            <Input type="text"
+                                value={searchQuery}
+                                onChange={handleInputChange}
+                                placeholder="Search..." />
+                        </div>
+                        <div className=' mb-4'>
+                            <Dialog>
+                                <DialogTrigger><Button variant="secondary">History</Button></DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        {history?.length ? <DialogTitle>Here's your History</DialogTitle> : <DialogTitle>No search history yet</DialogTitle>}
+                                        {/* <DialogTitle>Here's your History</DialogTitle> */}
+                                        <DialogDescription>
+                                            <ul className='mb-3'>
+                                                {history.map((item, index) => (
+                                                    <li className=' text-xl' key={index}>
+                                                        <button onClick={() => openCityDetails(item.name, item.lat, item.lon)}>{item.name}</button>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                            <Button onClick={clearHistory}>Clear History</Button>
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                </DialogContent>
+                            </Dialog>
+                        </div>
                     </div>
+
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -209,7 +215,24 @@ const InfiniteScrollComponent: React.FC = () => {
                     </Table>
                 </div>
                 <div id="scroll-sentinel" style={{ height: '10px' }}></div>
-                {loading && <div>Loading...</div>}
+                {loading && <div className=' w-full min-h-screen flex items-start justify-center'>
+                    <div className="flex flex-col justify-center items-center space-x-4">
+
+                        <div className="space-y-2 mb-12">
+                            <Skeleton className="h-8 w-1/2" />
+                            <Skeleton className="h-8 w-1/3" />
+                        </div>
+                        <div className="space-y-2 mb-12">
+                            <Skeleton className="h-8 w-[550px]" />
+                            <Skeleton className="h-8 w-[500px]" />
+                        </div>
+                        <div className="space-y-2 mb-12">
+                            <Skeleton className="h-8 w-[550px]" />
+                            <Skeleton className="h-8 w-[500px]" />
+                        </div>
+
+                    </div>
+                </div>}
 
             </div>
         </div>
