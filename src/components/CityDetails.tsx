@@ -13,7 +13,7 @@ import { useToast } from './ui/use-toast';
 import { Skeleton } from './ui/skeleton';
 import { Button } from './ui/button';
 
-const CityDetailsPage: React.FC = () => {
+const CityDetails: React.FC = () => {
     const { name, lat, lon } = useParams(); // Use useParams to get route parameters
     const [weatherData, setWeatherData] = useState<any>(null);
     const [temperatureUnit, setTemperatureUnit] = useState<'C' | 'F'>('C');
@@ -195,4 +195,4 @@ const CityDetailsPage: React.FC = () => {
     );
 };
 
-export default CityDetailsPage;
+export default CityDetails;
