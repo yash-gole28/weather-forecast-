@@ -22,7 +22,7 @@ import { ModeToggle } from './mode-toggle';
 import { Button } from './ui/button';
 import { useToast } from './ui/use-toast';
 import { Skeleton } from './ui/skeleton';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 
 
 const InfiniteScrollComponent: React.FC = () => {
@@ -122,6 +122,13 @@ const InfiniteScrollComponent: React.FC = () => {
         }
     };
 
+    const openCityDetails = (cityName: string, lat: number, lon: number) => {
+        const url = `/city-details/${encodeURIComponent(cityName)}/${encodeURIComponent(lat)}/${encodeURIComponent(lon)}`;
+        window.open(url, '_blank');
+        // Add to history
+        addToHistory(cityName, lat, lon);
+    };
+
     const addToHistory = (name: string, lat: number, lon: number) => {
         const updatedHistory = [{ name, lat, lon }, ...history];
         setHistory(updatedHistory);
@@ -142,8 +149,6 @@ const InfiniteScrollComponent: React.FC = () => {
                         <ModeToggle /></div>
                 </div>
 
-
-
                 <div>
                     <div className=' flex justify-between'>
                         <div className=' w-1/3 '>
@@ -158,15 +163,15 @@ const InfiniteScrollComponent: React.FC = () => {
                                 <DialogContent>
                                     <DialogHeader>
                                         {history?.length ? <DialogTitle>Here's your History</DialogTitle> : <DialogTitle>No search history yet</DialogTitle>}
-                                        {/* <DialogTitle>Here's your History</DialogTitle> */}
+                                        
                                         <DialogDescription>
-                                            <ul className='mb-3'>
+                                            <div className='mb-3'>
                                                 {history.map((item, index) => (
-                                                    <li className=' text-xl' key={index}>
+                                                    <p className=' text-xl' key={index}>
                                                         <button onClick={() => openCityDetails(item.name, item.lat, item.lon)}>{item.name}</button>
-                                                    </li>
+                                                    </p>
                                                 ))}
-                                            </ul>
+                                            </div>
                                             <Button onClick={clearHistory}>Clear History</Button>
                                         </DialogDescription>
                                     </DialogHeader>
@@ -193,7 +198,7 @@ const InfiniteScrollComponent: React.FC = () => {
                             {data.map((item, index) => (
                                 <TableRow key={index}>
                                     <TableCell>
-                                        <Link to={`/city-details/${encodeURIComponent(item.ascii_name)}/${encodeURIComponent(item.coordinates.lat)}/${encodeURIComponent(item.coordinates.lon)}`}>
+                                        <Link onClick={() => addToHistory(item.ascii_name, item.coordinates.lat, item.coordinates.lon)} to={`/city-details/${encodeURIComponent(item.ascii_name)}/${encodeURIComponent(item.coordinates.lat)}/${encodeURIComponent(item.coordinates.lon)}`} target='_blank'>
                                             {item.ascii_name}
                                         </Link>
                                     </TableCell>
