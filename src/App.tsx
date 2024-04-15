@@ -12,7 +12,7 @@ function App() {
     <>
     <Routes>
       <Route path='/' element={<Home/>}/>
-      <Route path='/city-details' element={<CityDetails/>} />
+      <Route path='/city-details/:name/:lat/:lon' element={<CityDetails/>} />
     </Routes>
     </>
   )

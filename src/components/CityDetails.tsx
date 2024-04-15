@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import {
     Table,
     TableBody,
@@ -13,9 +14,7 @@ import { Skeleton } from './ui/skeleton';
 import { Button } from './ui/button';
 
 const CityDetailsPage: React.FC = () => {
-    const [cityName, setCityName] = useState<string>('');
-    const [lat, setLat] = useState<string>('');
-    const [lon, setLon] = useState<string>('');
+    const { name, lat, lon } = useParams(); // Use useParams to get route parameters
     const [weatherData, setWeatherData] = useState<any>(null);
     const [temperatureUnit, setTemperatureUnit] = useState<'C' | 'F'>('C');
     const [pressureUnit, setPressureUnit] = useState<'hPa' | 'mb'>('hPa');
@@ -23,21 +22,6 @@ const CityDetailsPage: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false); // Add loading state
 
     const { toast } = useToast()
-
-    useEffect(() => {
-        // Parse the query string
-        const params = new URLSearchParams(window.location.search);
-        // Get the value of the 'name', 'lat', and 'lon' parameters
-        const cityNameParam = params.get('name');
-        const latParam = params.get('lat');
-        const lonParam = params.get('lon');
-        if (cityNameParam && latParam && lonParam) {
-            // Set the city name, latitude, and longitude states
-            setCityName(cityNameParam);
-            setLat(latParam);
-            setLon(lonParam);
-        }
-    }, []);
 
     useEffect(() => {
         const fetchWeatherData = async () => {
@@ -59,7 +43,7 @@ const CityDetailsPage: React.FC = () => {
         if (lat && lon) {
             fetchWeatherData();
         }
-    }, [lat, lon]);
+    }, [lat, lon, toast]); // Add lat, lon, and toast as dependencies
 
     // Function to convert temperature from Celsius to Fahrenheit
     const convertTemperature = (temperature: number) => {
@@ -110,7 +94,7 @@ const CityDetailsPage: React.FC = () => {
 
     return (
         <div>
-            <h1 className=' text-xl font-semibold m-4 border-b pb-4'>City Name: {cityName}</h1>
+            <h1 className=' text-xl font-semibold m-4 border-b pb-4'>City Name: {name}</h1>
             <div className=' flex justify-center border-b pb-4 m-4'>
                 <p className='text-muted-foreground text-xl'>Current Weather -{convertedWeatherData?.length ?convertedWeatherData[0].weather[0].description : null}</p>
         

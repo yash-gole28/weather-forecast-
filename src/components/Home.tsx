@@ -123,7 +123,7 @@ const InfiniteScrollComponent: React.FC = () => {
     };
 
     const openCityDetails = (cityName: string, lat: number, lon: number) => {
-        const url = `/city-details?name=${encodeURIComponent(cityName)}&lat=${lat}&lon=${lon}`;
+        const url = `/city-details/${encodeURIComponent(cityName)}/${lat}/${lon}`;
         window.open(url, '_blank');
         // Add to history
         addToHistory(cityName, lat, lon);
