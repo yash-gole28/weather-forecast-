@@ -22,7 +22,7 @@ import { ModeToggle } from './mode-toggle';
 import { Button } from './ui/button';
 import { useToast } from './ui/use-toast';
 import { Skeleton } from './ui/skeleton';
-// import { ToastAction } from '@radix-ui/react-toast';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 
 const InfiniteScrollComponent: React.FC = () => {
@@ -122,13 +122,6 @@ const InfiniteScrollComponent: React.FC = () => {
         }
     };
 
-    const openCityDetails = (cityName: string, lat: number, lon: number) => {
-        const url = `/city-details/${encodeURIComponent(cityName)}/${lat}/${lon}`;
-        window.open(url, '_blank');
-        // Add to history
-        addToHistory(cityName, lat, lon);
-    };
-
     const addToHistory = (name: string, lat: number, lon: number) => {
         const updatedHistory = [{ name, lat, lon }, ...history];
         setHistory(updatedHistory);
@@ -200,11 +193,9 @@ const InfiniteScrollComponent: React.FC = () => {
                             {data.map((item, index) => (
                                 <TableRow key={index}>
                                     <TableCell>
-                                        <button
-                                            onClick={() => openCityDetails(item.ascii_name, item.coordinates.lat, item.coordinates.lon)}
-                                        >
+                                        <Link to={`/city-details/${encodeURIComponent(item.ascii_name)}/${encodeURIComponent(item.coordinates.lat)}/${encodeURIComponent(item.coordinates.lon)}`}>
                                             {item.ascii_name}
-                                        </button>
+                                        </Link>
                                     </TableCell>
                                     <TableCell>{item.cou_name_en}</TableCell>
                                     <TableCell>{item.coordinates.lat} {item.coordinates.lon}</TableCell>
