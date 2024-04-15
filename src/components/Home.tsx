@@ -198,7 +198,7 @@ const InfiniteScrollComponent: React.FC = () => {
                             {data.map((item, index) => (
                                 <TableRow key={index}>
                                     <TableCell>
-                                        <Link onClick={() => addToHistory(item.ascii_name, item.coordinates.lat, item.coordinates.lon)} to={`/city-details/${encodeURIComponent(item.ascii_name)}/${encodeURIComponent(item.coordinates.lat)}/${encodeURIComponent(item.coordinates.lon)}`} target='_blank'>
+                                        <Link onClick={() => addToHistory(item.ascii_name, item.coordinates.lat, item.coordinates.lon)} to={`/city-details/${encodeURIComponent(item.ascii_name)}/${encodeURIComponent(item.coordinates.lat)}/${encodeURIComponent(item.coordinates.lon)}`}>
                                             {item.ascii_name}
                                         </Link>
                                     </TableCell>
