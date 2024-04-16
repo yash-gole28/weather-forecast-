@@ -155,8 +155,13 @@ const InfiniteScrollComponent: React.FC = () => {
                             <Input type="text"
                                 value={searchQuery}
                                 onChange={handleInputChange}
-                                placeholder="Search..." />
+                                placeholder="Search from list below..." />
                         </div>
+
+                        <div>
+                           <Link to={'/city'}> <Button variant='ghost'>Search By City Name</Button></Link>
+                        </div>
+
                         <div className=' mb-4'>
                             <Dialog>
                                 <DialogTrigger><Button variant="secondary">History</Button></DialogTrigger>
@@ -179,7 +184,7 @@ const InfiniteScrollComponent: React.FC = () => {
                             </Dialog>
                         </div>
                     </div>
-
+                                            
                     <Table>
                         <TableHeader>
                             <TableRow>
