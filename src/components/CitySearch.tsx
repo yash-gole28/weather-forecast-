@@ -65,16 +65,21 @@ const CitySearch: React.FC = () => {
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <Input
-                    type="text"
-                    value={cityName}
-                    onChange={handleInputChange}
-                    placeholder="Enter city name..."
-                />
-                <Button type="submit">Search</Button>
+            <form
+                onSubmit={handleSubmit}>
+                <div className='flex m-4'>
+                    <Input
+                        className=' w-1/3 mr-8'
+                        type="text"
+                        value={cityName}
+                        onChange={handleInputChange}
+                        placeholder="Enter city name..."
+                    />
+                    <Button type="submit">Search</Button>
+                </div>
+
             </form>
-        
+
             {loading && <div className=' w-full min-h-screen flex items-start justify-center'>
                 <div className="flex flex-col justify-center items-center space-x-4">
                     <div className="space-y-2 mb-12">
@@ -97,13 +102,13 @@ const CitySearch: React.FC = () => {
             </div>}
             {weatherData && (
                 <div>
-                    <h2>Weather for {weatherData.city.name}</h2>
+                    <h2 >Weather for {weatherData.city.name}</h2>
                     <h2>Population - {weatherData.city.population}</h2>
-
+                    <div>
                     <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>DateTime</TableHead>
+                        <TableHeader >
+                            <TableRow >
+                                <TableHead >DateTime</TableHead>
                                 <TableHead>Temperature
                                     <select
                                         className="bg-background text-foreground outline-none"
@@ -129,7 +134,7 @@ const CitySearch: React.FC = () => {
                                 <TableHead>Cloudiness (%)</TableHead>
                                 <TableHead>Pressure
                                     <select
-                                     className="bg-background text-foreground outline-none"
+                                        className="bg-background text-foreground outline-none"
                                         value={pressureUnit}
                                         onChange={(e) => setPressureUnit(e.target.value as 'hPa' | 'mb')}
                                     >
@@ -155,6 +160,9 @@ const CitySearch: React.FC = () => {
                             ))}
                         </TableBody>
                     </Table>
+
+                    </div>
+                   
                 </div>
             )}
         </div>
